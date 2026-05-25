@@ -1,0 +1,65 @@
+<%- include('../partials/header') %>
+<div class="container section">
+  <h1 class="page-title">Złóż zamówienie</h1>
+  <div class="checkout-layout">
+    <form method="POST" action="/orders/checkout" class="checkout-form">
+      <div class="checkout-section">
+        <h2>Adres dostawy</h2>
+        <div class="form-group">
+          <label>Ulica i numer</label>
+          <input type="text" name="address_street" required placeholder="np. ul. Kwiatowa 5">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Kod pocztowy</label>
+            <input type="text" name="address_zip" required placeholder="00-000">
+          </div>
+          <div class="form-group">
+            <label>Miasto</label>
+            <input type="text" name="address_city" required placeholder="Warszawa">
+          </div>
+        </div>
+      </div>
+
+      <div class="checkout-section">
+        <h2>Metoda płatności</h2>
+        <div class="payment-methods">
+          <label class="payment-option">
+            <input type="radio" name="method" value="card" checked>
+            <span>💳 Karta płatnicza</span>
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="method" value="blik">
+            <span>📱 BLIK</span>
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="method" value="transfer">
+            <span>🏦 Przelew bankowy</span>
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="method" value="cash_on_delivery">
+            <span>📦 Płatność przy odbiorze</span>
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-lg btn-full">✓ Potwierdź zamówienie</button>
+    </form>
+
+    <div class="order-summary-box">
+      <h2>Twoje zamówienie</h2>
+      <% cart.forEach(item => { %>
+        <div class="summary-item">
+          <span><%= item.name %> × <%= item.qty %></span>
+          <strong><%= (item.price * item.qty).toFixed(2) %> zł</strong>
+        </div>
+      <% }) %>
+      <hr>
+      <div class="summary-row total-row">
+        <span>Łącznie:</span>
+        <strong><%= total %> zł</strong>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

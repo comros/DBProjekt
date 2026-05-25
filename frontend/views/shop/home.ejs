@@ -1,0 +1,38 @@
+<%- include('../partials/header') %>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>Witaj w NordShop</h1>
+    <p>Elektronika, odzież i sport — wszystko w jednym miejscu.</p>
+    <a href="/shop/products" class="btn">Przeglądaj produkty</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Nowości</h2>
+    <div class="product-grid">
+      <% products.forEach(product => { %>
+        <div class="product-card">
+          <div class="product-img-wrap">
+            <% if (product.images && product.images.length) { %>
+              <img src="<%= product.images[0] %>" alt="<%= product.name %>">
+            <% } else { %>
+              <div class="product-img-placeholder"><%= product.name.charAt(0) %></div>
+            <% } %>
+          </div>
+          <div class="product-info">
+            <h3><a href="/shop/product/<%= product.slug %>"><%= product.name %></a></h3>
+            <p class="product-price"><%= product.price.toFixed(2) %> zł</p>
+            <form method="POST" action="/shop/cart/add">
+              <input type="hidden" name="product_id" value="<%= product._id %>">
+              <button type="submit" class="btn btn-sm">Dodaj do koszyka</button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

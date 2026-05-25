@@ -1,0 +1,49 @@
+<%- include('../partials/header') %>
+<div class="container section">
+  <h1 class="page-title">Koszyk</h1>
+
+  <% if (cart.length === 0) { %>
+    <div class="empty-state">
+      <p>Twój koszyk jest pusty.</p>
+      <a href="/shop/products" class="btn">Idź na zakupy</a>
+    </div>
+  <% } else { %>
+    <div class="cart-layout">
+      <div class="cart-items">
+        <% cart.forEach(item => { %>
+          <div class="cart-item">
+            <div class="cart-item-img">
+              <% if (item.image) { %>
+                <img src="<%= item.image %>" alt="<%= item.name %>">
+              <% } else { %>
+                <div class="product-img-placeholder"><%= item.name.charAt(0) %></div>
+              <% } %>
+            </div>
+            <div class="cart-item-info">
+              <h3><%= item.name %></h3>
+              <p><%= item.price.toFixed(2) %> zł × <%= item.qty %> = <strong><%= (item.price * item.qty).toFixed(2) %> zł</strong></p>
+            </div>
+            <form method="POST" action="/shop/cart/remove">
+              <input type="hidden" name="product_id" value="<%= item.product_id %>">
+              <button type="submit" class="btn-remove">✕</button>
+            </form>
+          </div>
+        <% }) %>
+      </div>
+      <div class="cart-summary">
+        <h2>Podsumowanie</h2>
+        <div class="summary-row">
+          <span>Suma:</span>
+          <strong><%= total %> zł</strong>
+        </div>
+        <% if (currentUser) { %>
+          <a href="/orders/checkout" class="btn btn-full btn-lg">Przejdź do kasy</a>
+        <% } else { %>
+          <a href="/auth/login" class="btn btn-full">Zaloguj się, żeby złożyć zamówienie</a>
+        <% } %>
+        <a href="/shop/products" class="btn btn-outline btn-full" style="margin-top:0.5rem">Kontynuuj zakupy</a>
+      </div>
+    </div>
+  <% } %>
+</div>
+<%- include('../partials/footer') %>

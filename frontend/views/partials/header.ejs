@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> — NordShop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+  <a href="/shop" class="navbar-brand">NORD<span>SHOP</span></a>
+  <ul class="navbar-links">
+    <li><a href="/shop/products">Produkty</a></li>
+    <% if (currentUser) { %>
+      <li><a href="/orders/my">Zamówienia</a></li>
+      <% if (currentUser.role === 'admin') { %>
+        <li><a href="/admin" class="link-admin">Panel admina</a></li>
+      <% } %>
+      <li><a href="/auth/logout">Wyloguj (<%= currentUser.name.split(' ')[0] %>)</a></li>
+    <% } else { %>
+      <li><a href="/auth/login">Zaloguj</a></li>
+      <li><a href="/auth/register" class="btn-nav">Rejestracja</a></li>
+    <% } %>
+    <li>
+      <a href="/shop/cart" class="cart-icon">
+        🛒
+        <% if (cart.length > 0) { %>
+          <span class="cart-badge"><%= cart.reduce((s,i)=>s+i.qty,0) %></span>
+        <% } %>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<div class="flash-container">
+  <% success.forEach(msg => { %><div class="flash flash-success"><%= msg %></div><% }) %>
+  <% error.forEach(msg => { %><div class="flash flash-error"><%= msg %></div><% }) %>
+</div>
+
+<main>

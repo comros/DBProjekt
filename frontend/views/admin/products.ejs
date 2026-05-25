@@ -1,0 +1,33 @@
+<%- include('../partials/header') %>
+<div class="admin-layout">
+  <%- include('./admin-nav') %>
+  <main class="admin-main">
+    <div class="admin-page-header">
+      <h1>Produkty</h1>
+      <a href="/admin/products/add" class="btn">+ Dodaj produkt</a>
+    </div>
+
+    <table class="data-table">
+      <thead>
+        <tr><th>Nazwa</th><th>Cena</th><th>Magazyn</th><th>Status</th><th>Akcje</th></tr>
+      </thead>
+      <tbody>
+        <% products.forEach(p => { %>
+          <tr>
+            <td><strong><%= p.name %></strong><br><small class="text-muted"><%= p.slug %></small></td>
+            <td><%= p.price.toFixed(2) %> zł</td>
+            <td><%= p.stock %> szt.</td>
+            <td><span class="badge <%= p.is_active ? 'badge-green' : 'badge-red' %>"><%= p.is_active ? 'Aktywny' : 'Ukryty' %></span></td>
+            <td class="actions-cell">
+              <a href="/admin/products/edit/<%= p._id %>" class="btn btn-sm">Edytuj</a>
+              <form method="POST" action="/admin/products/delete/<%= p._id %>" style="display:inline" onsubmit="return confirm('Ukryć produkt?')">
+                <button type="submit" class="btn btn-sm btn-danger">Usuń</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </main>
+</div>
+<%- include('../partials/footer') %>

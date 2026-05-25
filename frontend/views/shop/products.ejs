@@ -1,0 +1,54 @@
+<%- include('../partials/header') %>
+<div class="container section">
+  <h1 class="page-title">Produkty</h1>
+
+  <form method="GET" action="/shop/products" class="filter-bar">
+    <input type="text" name="search" placeholder="Szukaj..." value="<%= search %>">
+    <select name="category">
+      <option value="">Wszystkie kategorie</option>
+      <% categories.forEach(cat => { %>
+        <option value="<%= cat.id %>" <%= currentCategory == cat.id ? 'selected' : '' %>><%= cat.name %></option>
+      <% }) %>
+    </select>
+    <select name="sort">
+      <option value="" <%= sort==='' ? 'selected':'' %>>Domyślne sortowanie</option>
+      <option value="price_asc" <%= sort==='price_asc' ? 'selected':'' %>>Cena rosnąco</option>
+      <option value="price_desc" <%= sort==='price_desc' ? 'selected':'' %>>Cena malejąco</option>
+    </select>
+    <button type="submit" class="btn">Filtruj</button>
+    <a href="/shop/products" class="btn btn-outline">Reset</a>
+  </form>
+
+  <% if (products.length === 0) { %>
+    <div class="empty-state">
+      <p>Nie znaleziono produktów.</p>
+      <a href="/shop/products" class="btn">Pokaż wszystkie</a>
+    </div>
+  <% } else { %>
+    <div class="product-grid">
+      <% products.forEach(product => { %>
+        <div class="product-card">
+          <div class="product-img-wrap">
+            <% if (product.images && product.images.length) { %>
+              <img src="<%= product.images[0] %>" alt="<%= product.name %>">
+            <% } else { %>
+              <div class="product-img-placeholder"><%= product.name.charAt(0) %></div>
+            <% } %>
+          </div>
+          <div class="product-info">
+            <h3><a href="/shop/product/<%= product.slug %>"><%= product.name %></a></h3>
+            <p class="product-desc"><%= product.description.substring(0,80) %>...</p>
+            <div class="product-footer">
+              <span class="product-price"><%= product.price.toFixed(2) %> zł</span>
+              <form method="POST" action="/shop/cart/add" style="display:inline">
+                <input type="hidden" name="product_id" value="<%= product._id %>">
+                <button type="submit" class="btn btn-sm">+ Koszyk</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>
+<%- include('../partials/footer') %>

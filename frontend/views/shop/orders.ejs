@@ -1,0 +1,30 @@
+<%- include('../partials/header') %>
+<div class="container section">
+  <h1 class="page-title">Moje zamówienia</h1>
+  <% if (orders.length === 0) { %>
+    <div class="empty-state">
+      <p>Nie masz jeszcze żadnych zamówień.</p>
+      <a href="/shop/products" class="btn">Idź na zakupy</a>
+    </div>
+  <% } else { %>
+    <div class="orders-list">
+      <% orders.forEach(order => { %>
+        <div class="order-card">
+          <div class="order-header">
+            <span><strong>Zamówienie #<%= order.id %></strong></span>
+            <span class="order-status status-<%= order.status %>"><%= order.status %></span>
+            <span class="order-date"><%= new Date(order.created_at).toLocaleDateString('pl-PL') %></span>
+          </div>
+          <div class="order-body">
+            <p><%= order.items.length %> produkt(ów) • Łącznie: <strong><%= parseFloat(order.total).toFixed(2) %> zł</strong></p>
+            <% if (order.payment) { %>
+              <p>Płatność: <%= order.payment.method %> — <span class="status-<%= order.payment.status %>"><%= order.payment.status %></span></p>
+            <% } %>
+          </div>
+          <a href="/orders/<%= order.id %>" class="btn btn-sm">Szczegóły</a>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>
+<%- include('../partials/footer') %>

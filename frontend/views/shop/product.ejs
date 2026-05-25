@@ -1,0 +1,96 @@
+<%- include('../partials/header') %>
+<div class="container section">
+  <div class="product-detail">
+    <div class="product-detail-img">
+      <% if (product.images && product.images.length) { %>
+        <img src="<%= product.images[0] %>" alt="<%= product.name %>">
+      <% } else { %>
+        <div class="product-img-placeholder large"><%= product.name.charAt(0) %></div>
+      <% } %>
+    </div>
+    <div class="product-detail-info">
+      <h1><%= product.name %></h1>
+      <% if (avgRating) { %>
+        <div class="rating-stars">
+          <% for(let i=1;i<=5;i++) { %>
+            <span class="<%= i <= Math.round(avgRating) ? 'star filled' : 'star' %>">★</span>
+          <% } %>
+          <span class="rating-val"><%= avgRating %> / 5 (<%= reviews.length %> opinii)</span>
+        </div>
+      <% } %>
+      <p class="product-detail-price"><%= product.price.toFixed(2) %> zł</p>
+      <p class="product-detail-desc"><%= product.description %></p>
+
+      <% if (product.attributes && product.attributes.size > 0) { %>
+        <div class="product-attrs">
+          <h3>Specyfikacja</h3>
+          <table class="attrs-table">
+            <% for (const [key, val] of product.attributes) { %>
+              <tr><td><strong><%= key %></strong></td><td><%= val %></td></tr>
+            <% } %>
+          </table>
+        </div>
+      <% } %>
+
+      <div class="product-actions">
+        <% if (product.stock > 0) { %>
+          <form method="POST" action="/shop/cart/add">
+            <input type="hidden" name="product_id" value="<%= product._id %>">
+            <button type="submit" class="btn btn-lg">🛒 Dodaj do koszyka</button>
+          </form>
+          <span class="stock-info">Na stanie: <%= product.stock %> szt.</span>
+        <% } else { %>
+          <span class="out-of-stock">Brak w magazynie</span>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recenzje -->
+  <div class="reviews-section">
+    <h2>Opinie klientów</h2>
+
+    <% if (currentUser) { %>
+      <form method="POST" action="/shop/product/<%= product.slug %>/review" class="review-form">
+        <h3>Dodaj opinię</h3>
+        <div class="form-group">
+          <label>Ocena</label>
+          <select name="rating" required>
+            <option value="5">★★★★★ Doskonały</option>
+            <option value="4">★★★★☆ Dobry</option>
+            <option value="3">★★★☆☆ Średni</option>
+            <option value="2">★★☆☆☆ Słaby</option>
+            <option value="1">★☆☆☆☆ Bardzo słaby</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Treść opinii</label>
+          <textarea name="body" rows="4" required maxlength="1000" placeholder="Opisz swoje doświadczenia z produktem..."></textarea>
+        </div>
+        <button type="submit" class="btn">Wyślij opinię</button>
+      </form>
+    <% } else { %>
+      <p class="auth-link"><a href="/auth/login">Zaloguj się</a>, żeby dodać opinię.</p>
+    <% } %>
+
+    <% if (reviews.length === 0) { %>
+      <p class="empty-state">Brak opinii. Bądź pierwszy!</p>
+    <% } else { %>
+      <div class="reviews-list">
+        <% reviews.forEach(review => { %>
+          <div class="review-card">
+            <div class="review-header">
+              <strong><%= review.user_name %></strong>
+              <span class="review-stars">
+                <% for(let i=1;i<=5;i++) { %><span class="<%= i<=review.rating ? 'star filled':'star' %>">★</span><% } %>
+              </span>
+              <span class="review-date"><%= new Date(review.createdAt).toLocaleDateString('pl-PL') %></span>
+            </div>
+            <p><%= review.body %></p>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</div>
+<%- include('../partials/footer') %>
