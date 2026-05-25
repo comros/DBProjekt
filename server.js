@@ -76,9 +76,18 @@ const PORT = process.env.PORT || 3000;
     await sequelize.sync({ alter: true });
     console.log('✅ Tabele PostgreSQL zsynchronizowane');
 
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, () => {
       console.log(`\n🚀 Serwer działa na: http://localhost:${PORT}`);
       console.log(`   Panel admina:      http://localhost:${PORT}/admin`);
+    });
+
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error(`❌ Port ${PORT} jest już zajęty. Zatrzymaj poprzedni proces i spróbuj ponownie.`);
+      } else {
+        console.error('❌ Błąd serwera:', err);
+      }
+      process.exit(1);
     });
   } catch (err) {
     console.error('❌ Błąd startu:', err);

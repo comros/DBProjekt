@@ -1,0 +1,25 @@
+# Zależności
+node_modules/
+
+# Zmienne środowiskowe (zawierają hasła!)
+.env
+
+# Logi
+*.log
+logs/
+
+# Upload plików
+frontend/public/uploads/
+
+# System
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+.claude/
+
+# Pliki tymczasowe
+*.tmp
+*.cache
