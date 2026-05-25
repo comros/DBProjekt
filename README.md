@@ -1,4 +1,4 @@
-# NordShop — Projekt zaliczeniowy
+# BDShop — Projekt zaliczeniowy
 ## E-commerce: Node.js + PostgreSQL + MongoDB
 
 ---
