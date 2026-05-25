@@ -104,7 +104,7 @@ async function seed() {
         stock: 8,
         category_id: elektronika.id,
         images: [],
-        attributes: new Map([['Rozdzielczość','3440x1440'],['Odśw.','144Hz'],['Panel','IPS'],['Krzywizna','1800R']])
+        attributes: new Map([['Rozdzielczość','3440x1440'],['Odświeżanie','144Hz'],['Panel','IPS'],['Krzywizna','1800R']])
       },
       {
         name: 'Plecak trekkingowy 45L',
